@@ -39,6 +39,7 @@ class Counter():
 				ax = self.CODE_FILEPOINTER[bx+4]
 				ax = ax * 8
 				cx = self.toQWord(bp[ax:ax+8])
+				#print("cx = " + str(cx))
 				if cx != 0:
 					cx = cx -1
 					si = self.toDWord(self.CODE_FILEPOINTER[bx+8:bx+8+4])
