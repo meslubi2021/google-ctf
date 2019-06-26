@@ -23,6 +23,9 @@ while curser <= 2 * 0x760:
 	#	print("(0x%x) %s - 0x%x, 0x%x, 0x%x" % (pc, instruction, arg1, arg2, arg3))
 	curser += 32
 	
+	#1. compaire
+	#2. assign value
+	
 #print(instructions)
 for key in instructions:
 	pc = instructions[key]['pc']

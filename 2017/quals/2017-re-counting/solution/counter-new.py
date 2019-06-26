@@ -55,9 +55,9 @@ class Counter():
 		self.writeQWord(key_buffer, 0x18, 0)
 		return 0x42
 
-	def _0x490(self, key_buffer):
-		self.writeQWord(key_buffer, 0x20, 0)
-		return 0x4a
+	#def _0x490(self, key_buffer):
+	#	self.writeQWord(key_buffer, 0x20, 0)
+	#	return 0x4a
 
 	def _0x500(self, key_buffer):
 		self.writeQWord(key_buffer, 0x8, 0)
@@ -153,9 +153,9 @@ class Counter():
 		self.copyAndClearQwords(key_buffer, 0x20, 0x0)
 		return 0x4c
 
-	def _0x4e0(self, key_buffer):
-		self.copyAndClearQwords(key_buffer, 0x20, 0x0)
-		return 0x50
+	#def _0x4e0(self, key_buffer):
+	#	self.copyAndClearQwords(key_buffer, 0x20, 0x0)
+	#	return 0x50
 
 	def _0x510(self, key_buffer):
 		self.copyAndClearQwords(key_buffer, 0x8, 0x20)
@@ -202,9 +202,9 @@ class Counter():
 		self.copyQwords(key_buffer, 0x0, 0x8)
 		return 0x3b
 
-	def _0x400(self, key_buffer):
-		self.copyQwords(key_buffer, 0x0, 0x8)
-		return 0x41
+	#def _0x400(self, key_buffer):
+	#	self.copyQwords(key_buffer, 0x0, 0x8)
+	#	return 0x41
 
 
 
@@ -311,10 +311,49 @@ key_buffer[0x00] = counter""")
 			print("WARNING 0x670")
 		print("key_buffer[0x0] = key_buffer[0x8] - key_buffer[0x10]")		
 		self.writeQWord(key_buffer, 0x00, value_0x8 - value_0x10)
-		return 0x68		
+		return 0x68	
+
+	def _0x400(self, key_buffer):
+		self.writeQWord(key_buffer, 0x00, 0)
+
+		key_0x8 = self.toQWord(key_buffer[0x8:0x8+8])
+		key_0x20 = self.toQWord(key_buffer[0x20:0x20+8])
+
+		if key_0x8 == 0:
+			print("got here")
+			return 0x77
+		elif key_0x8 == 1:
+			self.writeQWord(key_buffer, 0x00, 1)
+			print("got here")
+			return 0x77
+		else:
+			self.writeQWord(key_buffer, 0x00, 1)
+			key_0x8 -= 1
+			self.writeQWord(key_buffer, 0x08, key_0x8)
+			#self._0x400(new_buffer) #0x480
+			return 0x48
 		
+	def _0x490(self, key_buffer):
+		self.copyQwords(key_buffer, 0x20, 0x00)
+		self.writeQWord(key_buffer, 0x00, 0)
+		self.writeQWord(key_buffer, 0x08, self.toQWord(key_buffer[0x8:0x8+8]) - 1)
+		#self._0x400(key_buffer) #at 0x4d0
+		return 0x4d
+
+	def _0x4e0(self, key_buffer):
+		key_0x10 = self.toQWord(key_buffer[0x10:0x10+8])
+		key_0x20 = self.toQWord(key_buffer[0x20:0x20+8])
+		key_0x20 += self.toQWord(key_buffer[0x0:0x0+8])
+		key_0x8 = key_0x20
+		self.writeQWord(key_buffer, 0x8, key_0x8)
 		
-	
+		while True:
+			if key_0x8 <= key_0x10: #0x640
+				self.writeQWord(key_buffer, 0x00, key_0x8)
+				return 0x77
+			else:
+				key_0x8 = key_0x8 - key_0x10
+
 	optimizer = {
 		#hand crafted optimizations
 		0x20: _0x20,
@@ -328,6 +367,8 @@ key_buffer[0x00] = counter""")
 		0x370: _0x370,
 		0x3a0: _0x3a0,
 		0x400: _0x400,
+		0x490: _0x490,
+		0x4e0: _0x4e0,
 		0x630: _0x630,
 		0x670: _0x670,
 
@@ -343,7 +384,7 @@ key_buffer[0x00] = counter""")
 		0x330: _0x330,
 		0x340: _0x340,
 		0x410: _0x410,
-		0x490: _0x490,
+		#0x490: _0x490,
 		0x500: _0x500,
 		0x540: _0x540,
 		0x570: _0x570,
@@ -368,7 +409,7 @@ key_buffer[0x00] = counter""")
 		0x3d0: _0x3d0,
 		0x420: _0x420,
 		0x4a0: _0x4a0,
-		0x4e0: _0x4e0,
+		#0x4e0: _0x4e0,
 		0x510: _0x510,
 		0x550: _0x550,
 		0x580: _0x580,
@@ -454,7 +495,8 @@ key_buffer[0x00] = counter""")
 				new_buffer = key_buffer[:]
 				new_next_line = self.toDWord(self.CODE_FILEPOINTER[current_line+8:current_line+8+4])
 				firstQWord = self.toDWord(self.CODE_FILEPOINTER[current_line+4:current_line+4+4])
-				print("call , to = 0x%x and copy first = %s bytes" % (new_next_line, firstQWord))
+				thirdQWord = self.toDWord(self.CODE_FILEPOINTER[current_line+12:current_line+12+4])
+				print("call , to = 0x%x and copy first = %s bytes. Return to = 0x%x" % (new_next_line, firstQWord, thirdQWord))
 				self.counter(new_buffer, new_next_line)
 				if firstQWord != 0:
 					key_buffer[0:firstQWord*8] = new_buffer[0:firstQWord*8]
