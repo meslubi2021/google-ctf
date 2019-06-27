@@ -98,8 +98,47 @@ class Counter():
 
 	#copy from one register to another then clear
 	def _0x0(self, key_buffer):
-		self.copyAndClearQwords(key_buffer, 0x8, 0x0)
-		return 0x2
+		value_0x0 = self.toQWord(key_buffer[0x0:0x0+8])
+		value_0x8 = value_0x0
+		if value_0x8 < 11:
+			self.writeQWord(key_buffer, 0x00, 0)
+			return 0x77
+		
+		total = 0
+		i = value_0x8
+		while(i >= 0):
+			counter = 0
+			testing_var = i
+			while testing_var >= 2:
+				if testing_var % 2 == 1:
+					testing_var = (3 * testing_var) + 1
+				else:
+					testing_var = math.floor(testing_var/2)
+				counter += 1
+			total += counter
+			i -= 1
+		value_0x0 = total
+		value_0x10 = value_0x0
+		
+		value_0x20 = self.fib(value_0x8)
+		
+		value_0x8 = value_0x20
+		
+		while True:
+			if value_0x8 <= value_0x10: #0x640
+				self.writeQWord(key_buffer, 0x00, value_0x8)
+				return 0x77
+			else:
+				value_0x8 = value_0x8 - value_0x10
+		
+	def fib(self, value_0x8):
+		if value_0x8 == 0:
+			return 0
+		elif value_0x8 == 1:
+			return 1
+		else:
+			return self.fib(value_0x8 - 1) + self.fib(value_0x8 - 2)
+		
 
 	def _0x110(self, key_buffer):
 		self.copyAndClearQwords(key_buffer, 0x10, 0x0)
@@ -462,7 +501,7 @@ key_buffer[0x00] = counter""")
 		0x740: _0x740,
 
 		#copy from one register to another then clear
-        0x0: _0x0,
+        	0x0: _0x0,
 		0x110: _0x110,
 		0x160: _0x160,
 		0x1b0: _0x1b0,
@@ -515,11 +554,11 @@ key_buffer[0x00] = counter""")
 	
 	def copyAndClearQwords(self, key_buffer, destination, source):
 		self.addQWordsToDestination(key_buffer, destination, source)
-		#print("key_buffer[0x%x] = 0" % (source))
+		print("key_buffer[0x%x] = 0" % (source))
 		key_buffer[source:source + 8] = struct.pack("<q", 0)
 		
 	def writeQWord(self, key_buffer, destination, value):
-		#print("key_buffer[0x%x] = %s" % (destination, value))
+		print("key_buffer[0x%x] = %s" % (destination, value))
 		key_buffer[destination:destination+8] = struct.pack("<q", value)
 	
 	def counter(self, key_buffer, line_num):
@@ -532,6 +571,7 @@ key_buffer[0x00] = counter""")
 			
 			#special cases
 			if current_line in self.optimizer:
+				#print("optimized -", end = "")
 				line_num = self.optimizer[current_line](self, key_buffer)
 				continue
 				
@@ -572,8 +612,6 @@ key_buffer[0x00] = counter""")
 		#print("exiting counter, key = " + str(binascii.hexlify(key_buffer)))
 					
 					
-	
-"""
 count = Counter()
 count.init()
 
@@ -588,6 +626,4 @@ print(binascii.hexlify(key))
 
 print("---")
 print("CTF{" + result + "}")
-"""
-
 
