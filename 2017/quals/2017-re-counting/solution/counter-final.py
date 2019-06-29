@@ -1,71 +1,85 @@
 import math
 import sys
-from array import array
-sys.setrecursionlimit(1500)
+import numpy as np
+#from fastcache import lru_cache
+
+#sum for 0 to 10,000 is 849666
+
 #9009131337
-#2,100,000
+#9,009,131,337
+#recurvsive (900,000) = 53.0 * 10,000
+#recurvsive (900,000) + functools.lru_cache = 9.2 * 10,000
+#dictionary with bit wizardry = 1.74 * 10,000
+#np.arry with bit wizardry = 1.93 * 10,000
+#C (900,000) = 0.058 * 10,000
+#C++ (900,000) = 0.61 * 10,000
+
+#8.0 seconds for miss caching
+#16.4 seconds for latest cached
+#13.6 cache largest steps
+
+sys.setrecursionlimit(1500)
 
 class Counter():
-	collatzCache = {}
 	def start(self, input_val):
 		if input_val < 11:
 			return 0
 			
-		total = 0
-		for i in range(input_val + 1):
-			total += self.collatz(i)
+		total = self.collatzSum(input_val)
+		print("collatz(10,000) = " + str(self.collatz(10000)))
+		print("total=" + str(total))
 		fib_value = self.fib(input_val, total)
 		return fib_value
 		
 	
-	def collatz(self, input_val):				
-			counter = 0
-			testing_var = input_val
-			while testing_var >= 2:
-				#if testing_var in self.collatzCache:
-				#	counter += self.collatzCache[testing_var]
-				#	break
-					
-				if testing_var % 2 == 1:
-					testing_var = (3 * testing_var) + 1
-				else:
-					testing_var = math.floor(testing_var/2)
-				counter += 1
+	def collatzSum(self, upperLimit, x):
+		totalSteps = 0
+		cacheSize = 10000000
+		#collatzCache = dict.fromkeys(range(cacheSize))
+		collatzCache = np.zeros(cacheSize)
+
+		for num in range(1, upperLimit + 1):
+			start_num = num
+			steps = 0
+			while num != 1:
+				#check cache
+				if num < start_num:
+					steps += collatzCache[num]
+					break
 				
-			#self.collatzCache[input_val] = counter
-			return counter
-	
-	"""
-	def collatz(self, limit):
-		maximum = 0
-		known = array("L", (0 for i in range(limit)))
-		for num in range(2, limit):
-			steps = known[num]
-			if steps:
-				print(steps)
-				return steps
-			else:
-				start_num = num
-				steps = 0
-				while num != 1:
-					if num < start_num:
-						steps += known[num]
-						break
-					while num & 1:
-						num += (num >> 1) + 1
-						steps += 2
-					while num & 1 == 0:
-						num >>= 1
-						steps += 1
+				#not in cache calculate next collatz
+				if num & 0x1: #odd
+					num += (num >> 1) + 1
+					steps += 2
 				
-				temp_start_num = start_num
-				while temp_start_num < limit:
-					assert known[temp_start_num] == 0
-					known[temp_start_num] = steps
-					temp_start_num <<= 1
+				if num & 0x1 == 0: #even
+					num >>= 1
 					steps += 1
-				return known[start_num]
-	"""
+			
+			#write to cache
+			collatzCache[start_num] = steps
+		
+		#sum cache
+		totalSteps = np.sum(collatzCache, dtype = 'int')
+		#totalSteps = sum(collatzCache)
+
+		return totalSteps
+
+	def collatzSum(self, upperLimit):
+		total = 0
+		for i in range(upperLimit + 1):
+			total +=self.collatz(i)
+		return total
+	
+	def collatz(self, num):
+		if num <= 1:
+			return 0
+		else:
+			if num % 2 == 1:
+				return self.collatz((3 * num) + 1) + 1
+			else:
+				return self.collatz(num/2) + 1
+	
 	
 	
 	def fib(self, n, modulo): 
