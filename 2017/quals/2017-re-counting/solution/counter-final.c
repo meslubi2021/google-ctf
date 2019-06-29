@@ -3,7 +3,7 @@
 
 
 #define N 9009131337
-#define CS 200000000	/* cache size */
+#define CS 100000000	/* cache size */
 
 typedef unsigned long ulong;
 typedef unsigned long long ull;
@@ -37,9 +37,9 @@ ulong getFromCache(ull key)
 
 
 
-ulong hailstoneSum(ull n)
+ull hailstoneSum(ull n)
 {
-    ulong totalSteps = 0;
+    ull totalSteps = 0;
     ull percent = N / 100;
 	for (ull start_num = 1; start_num <= N; ++start_num) 
     {
@@ -91,7 +91,7 @@ ulong hailstoneSum(ull n)
 
         if(start_num % percent == 0)
         {
-            printf("%llu%% subtotal = %lu\n", (start_num / percent), totalSteps);
+            printf("%llu%% subtotal = %llu\n", (start_num / percent), totalSteps);
         }
 	}
     return totalSteps;
@@ -99,7 +99,7 @@ ulong hailstoneSum(ull n)
  
 int main()
 {
-    ulong total = hailstoneSum(N);
-	printf("total = %lu\n", total);
+    ull total = hailstoneSum(N);
+	printf("total = %llu\n", total);
 	return 0;
 }
