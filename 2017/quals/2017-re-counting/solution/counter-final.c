@@ -1,9 +1,15 @@
 #include <stdio.h> //for printf
 #include <stdbool.h> //for bool
+#include <stdlib.h> //for strtol
 
+/* 
+    run comands:
+    gcc counter-final.cp
+    a.out 9009131337
 
-#define N 9009131337
-#define CS 100000000	/* cache size */
+    takes 5 hours to run on a laptop
+ */
+#define CS 100000000	/* cache size (~1.5GB) */
 
 typedef unsigned long ulong;
 typedef unsigned long long ull;
@@ -14,9 +20,7 @@ struct hailstoneEntry
     ulong steps;
 };
 
-
 struct hailstoneEntry hailstoneCache[CS] = {0};
-
 
 void addToCache(ull key, ulong steps)
 {
@@ -35,13 +39,11 @@ ulong getFromCache(ull key)
     return hailstoneCache[pos].steps;
 }
 
-
-
 ull hailstoneSum(ull n)
 {
     ull totalSteps = 0;
-    ull percent = N / 100;
-	for (ull start_num = 1; start_num <= N; ++start_num) 
+    ull percent = n / 100;
+	for (ull start_num = 1; start_num <= n; ++start_num) 
     {
         ull num = start_num;
 		ulong steps = 0;
@@ -96,13 +98,26 @@ ull hailstoneSum(ull n)
 	}
     return totalSteps;
 }
- 
-int main()
-{
-    ull total = hailstoneSum(N);
 
+ull fib(ull num, ull total)
+{
+    ull a = 0;
+    ull b = 1;
+    for(ull i = 1; i < num; ++i)
+    {
+        ull c = (a + b) % total;
+        a = b;
+        b = c;
+    }
+    return b;
+}
+ 
+int main(int argc, char *argv[])
+{
+    ull N = strtol(argv[1], 0, 10);
+    ull total = hailstoneSum(N); //2037448192360;
     ull fib_value = fib(N, total);
 
-	printf("result = %llx\n", total);
+	printf("result = %llx\n", fib_value);
 	return 0;
 }
