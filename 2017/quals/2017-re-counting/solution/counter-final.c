@@ -100,6 +100,9 @@ ull hailstoneSum(ull n)
 int main()
 {
     ull total = hailstoneSum(N);
-	printf("total = %llu\n", total);
+
+    ull fib_value = fib(N, total);
+
+	printf("result = %llx\n", total);
 	return 0;
 }
