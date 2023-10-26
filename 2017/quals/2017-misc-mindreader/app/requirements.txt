@@ -1,3 +1,4 @@
 gunicorn==19.7.1
 Flask==0.12.1
 gevent
+werkzeug>=3.0.1 # not directly required, pinned by Snyk to avoid a vulnerability
