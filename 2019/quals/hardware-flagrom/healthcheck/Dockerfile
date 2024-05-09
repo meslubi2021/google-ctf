@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.13.0b1-alpine
 RUN set -e -x ;\
         apk add --no-cache gcc python3-dev musl-dev go ;\
         pip install nameko
