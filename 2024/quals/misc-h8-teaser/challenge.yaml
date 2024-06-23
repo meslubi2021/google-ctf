@@ -14,7 +14,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/h8-teaser-challenge:a2e7ce316ab3dc3a187faf1c524d176821c37a146d5ec1691888f8492ab9b770
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

@@ -14,7 +14,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/auxin2-challenge:6721af757ef2ecaecc5065f80a2297412dd5ddfdc337a43bc9bd381c64ac8dc3
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

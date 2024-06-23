@@ -14,7 +14,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/py-storage-challenge:f63d8264d167f2525ad93f8830a1426a3ab298968d9918ab0c3736ec6dc20c09
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

@@ -21,7 +21,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/in-the-shadows-bot-challenge:778aa7029535c9f1897b0f76fced1c6ca7a37be1aa4ead5cd3b4b3b7db7683f8
   horizontalPodAutoscalerSpec:
     maxReplicas: 8
-    minReplicas: 4
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

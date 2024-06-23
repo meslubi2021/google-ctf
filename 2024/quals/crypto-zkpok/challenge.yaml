@@ -14,7 +14,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/zkpok-challenge:14dd553e9a5924804283ca2fefbaa9e1fb6bd71073c4e61cea9ad49482608021
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

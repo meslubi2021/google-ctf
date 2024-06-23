@@ -16,7 +16,7 @@ spec:
     image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/sappy-healthcheck:f34dbca61ced747306ddc208d84623163e79941f6cc5886fe0a183710db2ae2a
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

@@ -14,7 +14,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/knife-challenge:5831b499f94ce291efc43d9b0e42f0789c2fcc9bbaff93e08d2e7276d5763b1e
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

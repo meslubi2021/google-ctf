@@ -27,7 +27,7 @@ spec:
   image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/ilovecrackmes-challenge:0ebc1750c4488386c546ccfe3afed860d96f44e0de9209857f1ad730783f9832
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

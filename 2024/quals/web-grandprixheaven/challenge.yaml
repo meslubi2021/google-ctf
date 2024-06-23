@@ -16,7 +16,7 @@ spec:
     image: europe-west4-docker.pkg.dev/gctf-2024/kctf-cluster-challenges/grandprixheaven-healthcheck:48d7af1d818cf8b8b40a5cd4a1145f4712c371acd27ea29473b754072c19f1bc
   horizontalPodAutoscalerSpec:
     maxReplicas: 20
-    minReplicas: 2
+    minReplicas: 1
     targetCPUUtilizationPercentage: 80
   podTemplate:
     template:

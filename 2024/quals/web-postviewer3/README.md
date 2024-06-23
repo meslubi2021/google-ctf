@@ -12,39 +12,39 @@ read a little bit about it in
 
 ## Intro
 
-> POSTVIEWER V3 &nbsp;&nbsp;&nbsp;&nbsp; [308pt]
+> POSTVIEWER V3 &nbsp;&nbsp;&nbsp;&nbsp; [303pt]
 >
 > New year new postviewer.
 >
 > https://postviewer3-web.2024.ctfcompetition.com\
-> Solved by (18):\
+> Solved by (19):\
 > Friendly Maltese Citizens, DiceGang, BlueWater and more.
 
 Similarly to other Postviewer challenges, a player is welcomed with a simple
 client-side application where they can store and render some files.
 
 Each file is rendered in an shim iframe hosted on a unique origin that is directly
-connected to the contents of the file. This ensures that file A will be protected
+connected to the contents of the file. This ensures that a file A will be protected
 by Same Origin Policy from a file B.
 
 The goal of the challenge is to find a way to leak admin's file containing the flag.
 
 ## Shim iframe
 
-Each shim iframe is rendered at a unique origin at the below URL
+Each shim iframe is rendered at a unique URL, shown below.
 
 ```
 https://sbx-<hash>.postviewer3-web.2024.ctfcompetition.com/product/shim.html?origin=https://postviewer3-web.2024.ctfcompetition.com
 ```
 
-where hash is calculated in the following way
+Hash is calculated in the following way
 
 ```js
 hash = sha256(fileBody + product + origin + salt)
 ```
 
 Shim iframe receives a file to render (`fileBody`) together with `mimeType` and `salt`
-over postMessage communication. The `product` and `origin` are both  stored in
+over postMessage communication. The `product` and `origin` are both stored in
 the URL. The `origin`'s role is to reject any communication coming from a
 different origin but also to ensure that a `malicious.site` can't embed a static
 file on the same origin as the Postviewer v3 app.
@@ -60,9 +60,9 @@ Salt is used to randomize the origin, it's explained in the next section.
 All files stored in a local database are rendered by the same loader called `evaluatorHtml`.
 This is basically another shim iframe which purpose is to evaluate untrusted code.
 
-First, the postViewer app renders `evaluatorHtml` with `salt` set to `location.href`.
+First, the Postviewer app renders `evaluatorHtml` with `salt` set to `location.href`.
 The choice of salt is to pin the evaluator's origin to the rendered file, whose
-sha1(name) is present in the URL fragment - `file-<sha1(filename)>`. Then it sends
+`sha1(filename)` is present in the URL fragment - `file-<sha1(filename)>`. Then it sends
 a small JS snippet (together with a file to render) which inserts the file as a blob iframe.
 
 `evaluatorHtml`:
@@ -132,8 +132,8 @@ with the following values:
 
 ```js
   body == evaluatorHtml.split('https://storage.googleapis.com')[0]
-  product = ''
-  origin = 'https://storage.googleapis.com'
+  product == ''
+  origin == 'https://storage.googleapis.com'
   salt == evaluatorHtml.split('https://storage.googleapis.com')[1] +
           'postviewer' + 'https://postviewer3-web.2024.ctfcompetition.com/' +
           'https://postviewer3-web.2024.ctfcompetition.com/#aaaaaaaaaaa'
@@ -152,8 +152,8 @@ is to find an XSS there, and that's what I did in a couple of minutes
 This was the core idea of the challenge but unfortunately by wanting to introduce
 a race-condition part and having an unpredictable flag filename, I introduced an
 easier unintended solution. Players could achieve the collistion by forcing
-the application to set a custom `salt` (intended) but fully controlled
-(unintended) which can be used smuggle the origin of player exploits quite easily.
+the application to set a custom `salt` (intended), fully controlled
+(unintended), which can be used smuggle the origin of player exploits quite easily.
 
 
 ## Race-condition
@@ -183,7 +183,7 @@ After winning the race and hosting the exploit at `storage.googleapis.com` the
 players could access the shimIframe (because it's same-origin), read the inner
 iframe blob src, fetch it and read the flag.
 
-You can check out the full [exploit](soultion/solve.html), which is also thoroughly commented.
+You can check out the full [exploit](./solution/solve.html), which is also thoroughly commented.
 
 
 ## Closing thoughts
@@ -197,6 +197,8 @@ intended one if the bug had not been fixed.
 
 These CTF challenges and bugs show just how difficult it is to write a secure
 code, even for Security Engineers. Bugs are lurking everywhere from left to right.
+
+Make sure to also check out [Game Arcade writeup](../web-game-arcade/README.md).
 
 If you enjoyed the writeup, check out my writeups for previous editions!
 
