@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:12.6
 RUN set -e -x ;\
         apt-get -y update; \
         apt-get -y install python2.7
